@@ -69,6 +69,12 @@ class JobScraper:
 
         return jobs_json
     
+    def purge_jobs(self):
+        session = self.Session()
+        session.query(JobPost).delete()
+        session.commit()
+        session.close()
+    
     def process_df(self, df):
         df = df.fillna('')
 

@@ -117,7 +117,7 @@ body {
     position: fixed;
     width: 100%;
     bottom: 0;
-    z-index: -1;
+    z-index: 0;
 }
 
 .sidebar {
@@ -181,7 +181,7 @@ body {
     background-color: #555;
 }
 
-.sync-btn {
+.sync-btn, .purge-btn{
     display: inline-block;
     padding: 10px 20px;
     font-size: 16px;
@@ -194,17 +194,17 @@ body {
     margin-top: 10px; /* Add margin to separate button from the file details */
 }
 
-.sync-btn:hover {
+.sync-btn:hover, .purge-btn:hover {
     background-color: #0056b3;
 }
 
-.sync-btn.loading {
+.sync-btn.loading, .purge-btn.loading {
     position: relative;
     pointer-events: none;
     opacity: 0.6;
 }
 
-.sync-btn.loading:after {
+.sync-btn.loading:after, .purge-btn.loading:after{
     content: "";
     position: absolute;
     top: 50%;

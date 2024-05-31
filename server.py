@@ -115,9 +115,15 @@ async def sync_jobs_old():
     content = job_scraper.get_all_jobs()
 
     if not content:
-        raise HTTPException(status_code=404, detail="No jobs found")
+        return JSONResponse(content={"message": "No jobs found"})
 
     return JSONResponse(content=content)
+    
+@app.delete("/api/jobs/purge")
+async def purge_jobs():
+    job_scraper = JobScraper()
+    job_scraper.purge_jobs()
+    return JSONResponse(content={"message": "Jobs purged successfully"})
 
 @app.post("/api/settings")
 async def save_settings(settings: dict):

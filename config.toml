@@ -1,7 +1,7 @@
 [JobSearch]
 site_name = [ "indeed", "linkedin", "glassdoor",]
 search_term = ""
-location = "hyderabad"
+location = "india"
 distance = 100
 job_type = "parttime"
 is_remote = true
@@ -14,7 +14,7 @@ verbose = false
 hyperlinks = true
 
 [Resume]
-resumeFilePath = "C:/jobs/uploads/Resume_29-05-24.pdf"
+resumeFilePath = "C:/jobs/uploads/RESUME - CB.EN.U4ECE20145 - Software.pdf"
 
 [GenAI]
 openAIModel = "gpt-4"

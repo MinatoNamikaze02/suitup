@@ -48,9 +48,10 @@ class ResumeTool():
 
                         Key assumptions:
                         - The "search_term" should not include skills as such but industry-specific job titles or roles.
+                        - Remember that the "search_term" CANNOT be empty. If no job title is explicitly mentioned, use the most relevant information available.
                         - "Location" should be extracted with an emphasis on the most specific geographical detail available, ideally pinpointing the job seeker's preferred work location.
                         - For "job_type", interpret the context to identify the type of employment being sought, if stated.
-                        - The "country_indeed" should be inferred from the location provided. Kindly default to empty string if the location is not specified.
+                        - The "country_indeed" should be inferred from the location provided. Kindly default to empty strings if the information is not available.
 
                         This task requires a nuanced understanding of job-seeking terminology and the ability to discern relevant employment details from a broader array of resume content.
                 """

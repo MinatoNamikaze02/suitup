@@ -37,6 +37,10 @@ window.onload = async function() {
             throw new Error(`HTTP error! status: ${jobsResponse.status}`);
         }
         const jobs = await jobsResponse.json();
+        if (!jobs.length) {
+            alert('No jobs found. Please sync with AI to get job listings.');
+            return
+        }
         displayJobListings(jobs);
 
     } catch (error) {
@@ -131,6 +135,28 @@ async function syncWithAI() {
     }
 }
 
+async function purgeFromDB() {
+    const purgeBtn = document.querySelector('.purge-btn');
+    purgeBtn.classList.add('loading');
+
+    console.log('Purging jobs from AI...');
+    try {
+        const response = await fetch('/api/jobs/purge', {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        alert("Jobs purged successfully!");
+    } catch (error) {
+        console.error('Error purging jobs:', error);
+        alert('Failed to purge jobs.');
+    }
+    purgeBtn.classList.remove('loading');
+}
+
 function displayJobListings(jobs) {
     const container = document.querySelector('.job-listings');
 
@@ -181,7 +207,7 @@ function displayJobListings(jobs) {
         // Description
         const description = document.createElement('p');
         description.classList.add('job-description');
-        description.innerHTML = job.description ? job.description.substring(0, 200) + '...' : 'No description available';
+        description.innerHTML = job.description ? marked.parse(job.description.substring(0, 100)) + '...' : 'No description available';
         jobCard.appendChild(description);
 
         // Apply Link
