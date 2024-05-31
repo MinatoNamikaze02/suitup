@@ -1,3 +1,4 @@
+
 window.onload = async function() {
     try {
         // Fetch settings data from the API
@@ -104,53 +105,90 @@ async function syncWithAI() {
 }
 
 function displayJobListings(jobs) {
-    const container = document.createElement('div');
-    
-    container.classList.add('job-listings');
+    const container = document.querySelector('.job-listings');
 
     jobs.forEach(job => {
         const jobCard = document.createElement('div');
         jobCard.classList.add('job-card');
 
+        // Top section of the card
+        const topSection = document.createElement('div');
+        topSection.classList.add('job-card-top');
+
+        // Company Logo
         const logo = document.createElement('img');
-        logo.src = job.logo_photo_url || 'https://media.istockphoto.com/id/1205270037/photo/question-mark-on-speech-bubble.jpg?s=2048x2048&w=is&k=20&c=OhpGGcQv2dB31ly7yqcn9b0GDJAM6XTKEdWHu8DhWJc=';
+        logo.src = job.logo_photo_url || 'https://media.istockphoto.com/id/1142192548/vector/man-avatar-profile-male-face-silhouette-or-icon-isolated-on-white-background-vector.jpg?s=2048x2048&w=is&k=20&c=lyki7QHyULuJNNheEf-BI_DQNCDi2NRYMfVGTQj_4UM=';
         logo.alt = job.company || 'Unknown Company';
         logo.classList.add('job-logo');
-        jobCard.appendChild(logo);
+        topSection.appendChild(logo);
 
-        const title = document.createElement('h3');
-        title.innerText = job.title || 'Unknown Title';
-        jobCard.appendChild(title);
-
+        // Company and Time Info
+        const companyInfo = document.createElement('div');
+        companyInfo.classList.add('company-info');
         const company = document.createElement('p');
         company.classList.add('job-company');
         company.innerText = job.company || 'Unknown Company';
-        jobCard.appendChild(company);
+        const timePosted = document.createElement('p');
+        timePosted.classList.add('job-time-posted');
+        timePosted.innerText = job.date_posted || 'Unknown Date';
+        companyInfo.appendChild(company);
+        companyInfo.appendChild(timePosted);
+        topSection.appendChild(companyInfo);
 
+        // Title and Type
+        const title = document.createElement('h3');
+        title.classList.add('job-title');
+        title.innerText = job.title || 'Unknown Title';
+
+        const jobType = document.createElement('span');
+        jobType.classList.add('job-type');
+        jobType.innerText = job.job_type || 'Unknown Job Type';
+
+        jobCard.appendChild(topSection);
+        jobCard.appendChild(title);
+        jobCard.appendChild(jobType);
+
+        // Adding top section to job card
+        jobCard.appendChild(topSection);
+
+        // Description
         const description = document.createElement('p');
         description.classList.add('job-description');
-        description.innerText = job.description ? job.description.substring(0, 200) + '...' : 'No description available';
+        description.innerHTML = job.description ? job.description.substring(0, 200) + '...' : 'No description available';
         jobCard.appendChild(description);
 
+        // Apply Link
         const link = document.createElement('a');
-        link.href = job.job_url_direct || 'https://www.google.com';
-        link.innerText = 'Read More';
+        link.href = job.job_url_hyper ? job.job_url_hyper.match(/href="([^"]*)"/)[1] : '#';
+        link.innerText = 'Apply';
         link.target = '_blank';
+        link.classList.add('apply-btn');
         jobCard.appendChild(link);
-
+        
         container.appendChild(jobCard);
+
+        // // Additional Details Section
+        // const detailsSection = document.createElement('div');
+        // detailsSection.classList.add('details-section');
+
+        // // Location
+        // const location = document.createElement('p');
+        // location.classList.add('job-location');
+        // location.innerText = `Location: ${job.location || 'Location not specified'}`;
+        // detailsSection.appendChild(location);
+
+        // // Compensation
+        // const compensation = document.createElement('p');
+        // compensation.classList.add('job-compensation');
+        // compensation.innerText = job.min_amount && job.max_amount ?
+        //     `Compensation: ${job.min_amount} - ${job.max_amount} ${job.currency || ''}` :
+        //     'Compensation: Not specified';
+        // detailsSection.appendChild(compensation);
+
+        // // Add the details section below the job card
+        // container.appendChild(detailsSection);
     });
-
-    // Remove existing job listings if any
-    const existingContainer = document.querySelector('.job-listings');
-    if (existingContainer) {
-        existingContainer.remove();
-    }
-
-    // Append the new job listings
-    document.body.appendChild(container);
 }
-
 
 
 async function handleFileUpload(event) {

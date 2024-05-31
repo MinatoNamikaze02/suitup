@@ -1,23 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Danfo&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Rubik+Mono+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Danfo&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Rubik+Mono+One&display=swap');
 
 body {
-    font-family: 'Rubik Mono One', serif;
+    font-family: 'Noto Sans', serif;
     margin: 0;
     padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #333;
+    background: rgba(51, 51, 51, 0.8); /* Glassy effect */
     color: white;
     padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(10px); /* Apply blur effect */
+    z-index: 1000; /* Ensure it stays above other elements */
 }
 
 .navbar-title {
     font-size: 24px;
-    font-family: 'Danfo', sans-serif;
+    font-family: 'Noto Sans', sans-serif;
 }
 
 .settings-icon {
@@ -36,8 +41,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: calc(100vh - 80px);
     padding: 20px;
+    margin-bottom: 80px; /* Add margin to separate from footer */
 }
 
 .heading {
@@ -87,18 +92,9 @@ body {
     display: none;
 }
 
-.file--upload:hover {
-    border-color: #aaa;
-    color: #333;
-}
-.file--upload i {
-    font-size: 48px;
-}
-
 .uploaded-info {
-    margin-top: 20px;
     display: flex;
-    flex-direction: column; /* Ensure button is below the file details */
+    flex-direction: column;
     align-items: center;
     color: green;
 }
@@ -121,6 +117,7 @@ body {
     position: fixed;
     width: 100%;
     bottom: 0;
+    z-index: 1000;
 }
 
 .sidebar {
@@ -162,14 +159,8 @@ body {
     margin-bottom: 10px;
 }
 
-.sidebar-content input[type="text"]{
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.sidebar-content select{
+.sidebar-content input[type="text"],
+.sidebar-content select {
     padding: 10px;
     margin-top: 5px;
     border: 1px solid #ccc;
@@ -207,8 +198,6 @@ body {
     background-color: #0056b3;
 }
 
-/* Add these styles in your styles.css or within a <style> tag in the HTML file */
-
 .sync-btn.loading {
     position: relative;
     pointer-events: none;
@@ -235,69 +224,82 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* Container for all job listings */
 .job-listings {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
     padding: 20px;
-    width: 100%;
 }
 
-/* Individual job card */
 .job-card {
     background-color: #ffffff;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    width: 80%;
-    max-width: 800px;
-    transition: transform 0.2s;
+    width: 300px; /* Adjust width for compact cards */
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 20px;
 }
 
 .job-card:hover {
-    transform: scale(1.02);
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* Company logo */
-.job-logo {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+.job-card-top {
+    display: flex;
+    align-items: center;
     margin-bottom: 15px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-/* Job title */
-.job-card h3 {
-    font-size: 1.5em;
-    margin: 10px 0;
-    color: #333;
-    text-align: center;
+.job-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
 }
 
-/* Company name */
+.company-info {
+    display: flex;
+    flex-direction: column;
+}
+
 .job-company {
     font-size: 1em;
-    color: #777;
-    text-align: center;
-    margin-bottom: 15px;
+    color: #333;
 }
 
-/* Job description */
+.job-time-posted {
+    font-size: 0.8em;
+    color: #777;
+}
+
+.job-title {
+    font-size: 1.2em;
+    margin: 10px 0;
+    color: #333;
+}
+
+.job-type {
+    display: inline-block;
+    background-color: #f1f1f1;
+    color: #777;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    margin-bottom: 10px;
+}
+
 .job-description {
-    font-size: 1em;
+    font-size: 0.9em;
     color: #555;
     margin-bottom: 15px;
     text-align: justify;
 }
 
-/* Read more link */
-.job-card a {
+.apply-btn {
     display: block;
     text-align: center;
     padding: 10px;
@@ -305,8 +307,25 @@ body {
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
+    margin-top: 10px;
 }
 
-.job-card a:hover {
+.apply-btn:hover {
     background-color: #0056b3;
+}
+
+.details-section {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    width: 300px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.job-location, .job-compensation {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 10px;
 }

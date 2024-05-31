@@ -11,6 +11,9 @@
 <nav>
     <div class="navbar">
         <div class="navbar-title">JobHunter</div>
+        <div class="uploaded-info" id="uploaded-info" style="display: none;">
+            <button class="sync-btn" onclick="syncWithAI()">Sync Jobs</button>
+        </div>  
         <button class="settings-icon" onclick="openSidebar()">
             ⚙️
         </button>
@@ -18,7 +21,7 @@
 </nav>
 
 <div class="container">
-    <div class="heading">Automated job search using generative AI. Just upload your resume and kickstart your job hunt</div>
+    <!-- <div class="heading">Automated job search using generative AI. Just upload your resume and kickstart your job hunt</div> -->
     <div class="upload-section" id="upload-section">
         <div class="file file--upload">
             <label for="input-file-upload">
@@ -32,7 +35,6 @@
             <i class="material-icons">check_circle</i>
             <span id="file-name"></span>
         </div>
-        <button class="sync-btn" onclick="syncWithAI()">Sync Jobs</button>
     </div>    
 </div>
 
@@ -51,10 +53,15 @@
     </div>
 </div>
 
+<div class="job-listings">
+    <!-- Job cards will be dynamically added here -->
+</div>
+
 <div class="footer">
     &copy; 2024 JobHunter
 </div>
 
 <script src="/static/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </body>
 </html>
