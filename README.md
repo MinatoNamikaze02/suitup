@@ -1,2 +1,2 @@
-!(implementation1.png)[https://github.com/MinatoNamikaze02/suitup/blob/master/assets/imp1.png]
-!(implementation1.png)[https://github.com/MinatoNamikaze02/suitup/blob/master/assets/imp2.png]
+![Implementation 1](https://github.com/MinatoNamikaze02/suitup/blob/master/assets/imp1.png)
+![Implementation 2](https://github.com/MinatoNamikaze02/suitup/blob/master/assets/imp2.png)
