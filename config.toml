@@ -14,7 +14,7 @@ verbose = false
 hyperlinks = true
 
 [Resume]
-resumeFilePath = "C:/jobs/uploads/RESUME - CB.EN.U4ECE20145 - Software.pdf"
+resumeFilePath = "/path/to/your/file"
 
 [GenAI]
 openAIModel = "gpt-4"
