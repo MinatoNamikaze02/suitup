@@ -11,9 +11,14 @@
 <nav>
     <div class="navbar">
         <div class="navbar-title">JobHunter</div>
-        <div class="uploaded-info" id="uploaded-info" style="display: none;">
-            <button class="sync-btn" onclick="syncWithAI()">Sync Jobs</button>
-        </div>  
+        <div style="display: flex; flex-direction: row;">
+            <div class="uploaded-info" id="uploaded-info" style="display: none; padding-right: 10px;">
+                <button class="sync-btn" onclick="syncWithAI()">Sync Jobs</button>
+            </div>  
+            <div class="uploaded-info" id="purged-info" style="padding-left: 10px;">
+                <button class="purge-btn" onclick="purgeFromDB()">Purge Jobs</button>
+            </div>  
+        </div>
         <button class="settings-icon" onclick="openSidebar()">
             ⚙️
         </button>
