@@ -70,16 +70,6 @@ class JobScraper:
         return jobs_json
     
     def process_df(self, df):
-        """
-        Process the DataFrame by filling NaN values and converting all columns to string.
-
-        Args:
-            df (pd.DataFrame): DataFrame containing job posts.
-
-        Returns:
-            pd.DataFrame: Processed DataFrame.
-        """
-        # Fill NaN values with an empty string
         df = df.fillna('')
 
         # Convert all columns to string type
