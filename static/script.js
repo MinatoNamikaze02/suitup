@@ -1,4 +1,3 @@
-
 window.onload = async function() {
     try {
         // Fetch settings data from the API
@@ -10,10 +9,18 @@ window.onload = async function() {
         console.log('Settings:', data);
 
         // Update the settings form with the data
-        select = document.getElementById("Open AI model");
-        select.value = data.openAIModel;
+        document.getElementById("Open AI model").value = data.GenAI.openAIModel;
 
-        // find the file if already uploaded
+        document.getElementById("location").value = data.JobSearch.location;
+        document.getElementById("distance").value = data.JobSearch.distance;
+        document.getElementById("job_type").value = data.JobSearch.job_type;
+        document.getElementById("is_remote").checked = data.JobSearch.is_remote;
+        document.getElementById("results_wanted").value = data.JobSearch.results_wanted;
+        document.getElementById("easy_apply").checked = data.JobSearch.easy_apply;
+        document.getElementById("country_indeed").value = data.JobSearch.country_indeed;
+        document.getElementById("hours_old").value = data.JobSearch.hours_old;
+
+        // Find the file if already uploaded
         const fileResponse = await fetch('/api/uploads');
         if (!fileResponse.ok) {
             throw new Error(`HTTP error! status: ${fileResponse.status}`);
@@ -37,9 +44,8 @@ window.onload = async function() {
         alert('Failed to load settings.');
     }
 }
-
 function openSidebar() {
-    document.getElementById("sidebar").style.width = "250px";
+    document.getElementById("sidebar").style.width = "500px";
 }
 
 function closeSidebar() {
@@ -47,12 +53,33 @@ function closeSidebar() {
 }
 
 async function saveSettings() {
-    select = document.getElementById("Open AI model");
+    const openAIModelSelect = document.getElementById("Open AI model");
+    const location = document.getElementById("location").value;
+    const distance = document.getElementById("distance").value;
+    const job_type = document.getElementById("job_type").value;
+    const is_remote = document.getElementById("is_remote").checked;
+    const results_wanted = document.getElementById("results_wanted").value;
+    const easy_apply = document.getElementById("easy_apply").checked;
+    const country_indeed = document.getElementById("country_indeed").value;
+    const hours_old = document.getElementById("hours_old").value;
+
     const settings = {
-        openAIModel: select.options[select.selectedIndex].value,
+        GenAI: {
+            openAIModel: openAIModelSelect.options[openAIModelSelect.selectedIndex].value,
+        },
+        JobSearch: {
+            location,
+            distance: parseInt(distance),
+            job_type,
+            is_remote,
+            results_wanted: parseInt(results_wanted),
+            easy_apply,
+            country_indeed,
+            hours_old: parseInt(hours_old),
+        }
     };
+
     try {
-        // Send settings data to the API
         const response = await fetch('/api/settings', {
             method: 'POST',
             headers: {
@@ -164,7 +191,7 @@ function displayJobListings(jobs) {
         link.target = '_blank';
         link.classList.add('apply-btn');
         jobCard.appendChild(link);
-        
+
         container.appendChild(jobCard);
 
         // // Additional Details Section

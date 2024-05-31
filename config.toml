@@ -1,15 +1,15 @@
 [JobSearch]
 site_name = [ "indeed", "linkedin", "glassdoor",]
 search_term = ""
-location = ""
-distance = 50
-job_type = [ "",]
+location = "hyderabad"
+distance = 100
+job_type = "parttime"
 is_remote = true
-results_wanted = 10
-easy_apply = false
+results_wanted = 50
+easy_apply = true
 country_indeed = "india"
 offset = 0
-hours_old = 24
+hours_old = 48
 verbose = false
 hyperlinks = true
 

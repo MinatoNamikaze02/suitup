@@ -14,10 +14,6 @@ body {
     background: rgba(51, 51, 51, 0.8); /* Glassy effect */
     color: white;
     padding: 10px 20px;
-    position: sticky;
-    top: 0;
-    backdrop-filter: blur(10px); /* Apply blur effect */
-    z-index: 1000; /* Ensure it stays above other elements */
 }
 
 .navbar-title {
@@ -109,6 +105,10 @@ body {
     margin-right: 10px;
 }
 
+.checkbox-group {
+    margin: 20px 0;
+}
+
 .footer {
     background-color: #f1f1f1;
     color: #333;
@@ -117,7 +117,7 @@ body {
     position: fixed;
     width: 100%;
     bottom: 0;
-    z-index: 1000;
+    z-index: -1;
 }
 
 .sidebar {

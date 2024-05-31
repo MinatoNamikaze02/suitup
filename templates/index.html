@@ -48,10 +48,48 @@
                 <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
                 <option value="gpt-4">gpt-4</option>
             </select>
+            
+            <h3>Job Search Settings</h3>
+            
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location">
+            
+            <label for="distance">Distance</label>
+            <input type="number" id="distance" name="distance" value="50">
+            
+            <label for="job_type">Job Type</label>
+            <select id="job_type" name="job_type" multiple>
+                <option value="">Any</option>
+                <option value="fulltime">Full Time</option>
+                <option value="parttime">Part Time</option>
+                <option value="contract">Contract</option>
+                <option value="internship">Internship</option>
+            </select>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="is_remote" name="is_remote" checked>
+                <label for="is_remote">Is Remote</label>
+            </div>
+
+            <label for="results_wanted">Results Wanted</label>
+            <input type="number" id="results_wanted" name="results_wanted" value="10">
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="easy_apply" name="easy_apply">
+                <label for="easy_apply">Easy Apply</label>
+            </div>
+            
+            <label for="country_indeed">Country</label>
+            <input type="text" id="country_indeed" name="country_indeed" value="india">
+                        
+            <label for="hours_old">Hours Old</label>
+            <input type="number" id="hours_old" name="hours_old" value="24">
+            
             <button type="button" onclick="saveSettings()">Save</button>
         </form>
     </div>
 </div>
+
 
 <div class="job-listings">
     <!-- Job cards will be dynamically added here -->

@@ -43,7 +43,7 @@ async def upload_resume(resume: UploadFile = File(...)):
             shutil.copyfileobj(resume.file, buffer)
         # Save resume file path to config.toml
         config = utils.load_config()
-        config['resumeFilePath'] = file_path
+        config['Resume']['resumeFilePath'] = file_path
         with open(CONFIG_PATH, 'w') as config_file:
             toml.dump(config, config_file)
         return JSONResponse(content={"filename": resume.filename})
@@ -62,7 +62,8 @@ async def sync_jobs():
         config = utils.load_config()
 
         # Load resume file path
-        resume_file_path = config.get("Resume").get("resumeFilePath")
+        # Load resume file path
+        resume_file_path = config.get("Resume", {}).get("resumeFilePath", "")
         if not os.path.exists(resume_file_path):
             raise HTTPException(status_code=400, detail="Resume file not found")
 
@@ -77,6 +78,11 @@ async def sync_jobs():
 
         # Extract job search settings
         job_search_settings = resume_ext.extract_job_search_details(dict_repr)
+
+        # Apply default values for empty AI results
+        for key, value in job_search_settings.items():
+            if not value:
+                job_search_settings[key] = config.get("JobSearch", {}).get(key, value)
 
         logger.info(f"Job search settings: {job_search_settings}")
 
@@ -102,7 +108,7 @@ async def sync_jobs():
         # Log full stack trace
         logger.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
-    
+        
 @app.get("/api/old")
 async def sync_jobs_old():
     job_scraper = JobScraper()
@@ -116,9 +122,25 @@ async def sync_jobs_old():
 @app.post("/api/settings")
 async def save_settings(settings: dict):
     try:
+        # Load existing settings
+        if os.path.exists(CONFIG_PATH):
+            with open(CONFIG_PATH, 'r') as config_file:
+                existing_settings = toml.load(config_file)
+        else:
+            existing_settings = {}
+
+        # Update the existing settings with the new ones
+        for key, value in settings.items():
+            if isinstance(value, dict) and key in existing_settings:
+                existing_settings[key].update(value)
+            else:
+                existing_settings[key] = value
+
+        # Write the updated settings back to the file
         with open(CONFIG_PATH, 'w') as config_file:
-            toml.dump(settings, config_file)
-        return JSONResponse(content=settings)
+            toml.dump(existing_settings, config_file)
+        
+        return JSONResponse(content=existing_settings)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
