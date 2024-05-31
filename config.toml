@@ -1,0 +1,20 @@
+[JobSearch]
+site_name = [ "indeed", "linkedin", "glassdoor",]
+search_term = ""
+location = ""
+distance = 50
+job_type = [ "",]
+is_remote = true
+results_wanted = 10
+easy_apply = false
+country_indeed = "india"
+offset = 0
+hours_old = 24
+verbose = false
+hyperlinks = true
+
+[Resume]
+resumeFilePath = "C:/jobs/uploads/Resume_29-05-24.pdf"
+
+[GenAI]
+openAIModel = "gpt-4"

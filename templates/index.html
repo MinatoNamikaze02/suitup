@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobHunter</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<nav>
+    <div class="navbar">
+        <div class="navbar-title">JobHunter</div>
+        <button class="settings-icon" onclick="openSidebar()">
+            ⚙️
+        </button>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="heading">Automated job search using generative AI. Just upload your resume and kickstart your job hunt</div>
+    <div class="upload-section" id="upload-section">
+        <div class="file file--upload">
+            <label for="input-file-upload">
+                <i class="material-icons">cloud_upload</i> Upload
+            </label>
+            <input id="input-file-upload" type="file" onchange="handleFileUpload(event)" />
+        </div>
+    </div>
+    <div class="uploaded-info" id="uploaded-info" style="display: none;">
+        <div class="file-details">
+            <i class="material-icons">check_circle</i>
+            <span id="file-name"></span>
+        </div>
+        <button class="sync-btn" onclick="syncWithAI()">Sync Jobs</button>
+    </div>    
+</div>
+
+<div id="sidebar" class="sidebar">
+    <i class="material-icons close-icon close-btn" onclick="closeSidebar()">close</i>
+    <div class="sidebar-content">
+        <h2>Settings</h2>
+        <form id="settings-form">
+            <label for="Open AI model">Choose a Model</label>
+            <select name="Open AI model" id="Open AI model">
+                <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                <option value="gpt-4">gpt-4</option>
+            </select>
+            <button type="button" onclick="saveSettings()">Save</button>
+        </form>
+    </div>
+</div>
+
+<div class="footer">
+    &copy; 2024 JobHunter
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
