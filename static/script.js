@@ -27,9 +27,14 @@ window.onload = async function() {
         }
         const fileData = await fileResponse.json();
         if (fileData.uploads.length > 0) {
+            console.log('Uploaded file:', fileData.uploads[0]);
             document.getElementById("file-name").innerText = fileData.uploads[0];
             document.getElementById("uploaded-info").style.display = "flex";
+            document.getElementById("purged-info").style.display = "flex";
             document.getElementById("upload-section").style.display = "none";
+        } else {
+            alert('No Resume uploaded.');
+            return
         }
 
         const jobsResponse = await fetch('/api/old');
@@ -260,6 +265,7 @@ async function handleFileUpload(event) {
             const data = await response.json();
             document.getElementById("file-name").innerText = data.filename;
             document.getElementById("uploaded-info").style.display = "flex";
+            document.getElementById("purged-info").style.display = "flex";
             uploadBtn.style.display = "none";
         } else {
             alert("Failed to upload file.");

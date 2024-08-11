@@ -15,6 +15,7 @@ import utils
 from AI.keyword_extraction import ResumeTool
 from search.job_search import JobScraper
 from search.logger import get_logger
+from config import settings
 
 logger = get_logger(__name__)
 
@@ -22,8 +23,8 @@ load_dotenv()
 
 app = FastAPI()
 
-UPLOAD_DIR = os.getenv("UPLOAD_DIR", "uploads")
-CONFIG_PATH = os.getenv("CONFIG_PATH", "config.toml")
+UPLOAD_DIR = settings.upload_dir
+CONFIG_PATH = settings.config_path
 
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)

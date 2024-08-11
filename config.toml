@@ -3,7 +3,7 @@ site_name = [ "indeed", "linkedin", "glassdoor",]
 search_term = ""
 location = "india"
 distance = 100
-job_type = "parttime"
+job_type = "fulltime"
 is_remote = true
 results_wanted = 50
 easy_apply = true
@@ -14,7 +14,7 @@ verbose = false
 hyperlinks = true
 
 [Resume]
-resumeFilePath = "/path/to/your/file"
+resumeFilePath = "resume_uploads/Akash.pdf"
 
 [GenAI]
 openAIModel = "gpt-4"

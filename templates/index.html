@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,104 +8,113 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css">
 </head>
+
 <body>
-<nav>
-    <div class="navbar">
-        <div class="navbar-title">JobHunter</div>
-        <div style="display: flex; flex-direction: row;">
-            <div class="uploaded-info" id="uploaded-info" style="display: none; padding-right: 10px;">
-                <button class="sync-btn" onclick="syncWithAI()">Sync Jobs</button>
-            </div>  
-            <div class="uploaded-info" id="purged-info" style="padding-left: 10px;">
-                <button class="purge-btn" onclick="purgeFromDB()">Purge Jobs</button>
-            </div>  
-        </div>
-        <button class="settings-icon" onclick="openSidebar()">
-            ⚙️
-        </button>
-    </div>
-</nav>
-
-<div class="container">
-    <!-- <div class="heading">Automated job search using generative AI. Just upload your resume and kickstart your job hunt</div> -->
-    <div class="upload-section" id="upload-section">
-        <div class="file file--upload">
-            <label for="input-file-upload">
-                <i class="material-icons">cloud_upload</i> Upload
-            </label>
-            <input id="input-file-upload" type="file" onchange="handleFileUpload(event)" />
-        </div>
-    </div>
-    <div class="uploaded-info" id="uploaded-info" style="display: none;">
-        <div class="file-details">
-            <i class="material-icons">check_circle</i>
-            <span id="file-name"></span>
-        </div>
-    </div>    
-</div>
-
-<div id="sidebar" class="sidebar">
-    <i class="material-icons close-icon close-btn" onclick="closeSidebar()">close</i>
-    <div class="sidebar-content">
-        <h2>Settings</h2>
-        <form id="settings-form">
-            <label for="Open AI model">Choose a Model</label>
-            <select name="Open AI model" id="Open AI model">
-                <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-                <option value="gpt-4">gpt-4</option>
-            </select>
-            
-            <h3>Job Search Settings</h3>
-            
-            <label for="location">Location</label>
-            <input type="text" id="location" name="location">
-            
-            <label for="distance">Distance</label>
-            <input type="number" id="distance" name="distance" value="50">
-            
-            <label for="job_type">Job Type</label>
-            <select id="job_type" name="job_type" multiple>
-                <option value="">Any</option>
-                <option value="fulltime">Full Time</option>
-                <option value="parttime">Part Time</option>
-                <option value="contract">Contract</option>
-                <option value="internship">Internship</option>
-            </select>
-            
-            <div class="checkbox-group">
-                <input type="checkbox" id="is_remote" name="is_remote" checked>
-                <label for="is_remote">Is Remote</label>
+    <nav>
+        <div class="navbar">
+            <div class="navbar-title">
+                SuitUp
             </div>
-
-            <label for="results_wanted">Results Wanted</label>
-            <input type="number" id="results_wanted" name="results_wanted" value="10">
-            
-            <div class="checkbox-group">
-                <input type="checkbox" id="easy_apply" name="easy_apply">
-                <label for="easy_apply">Easy Apply</label>
+            <div style="display: flex; flex-direction: row;">
+                <div class="uploaded-info" id="uploaded-info" style="display: none; padding-right: 10px;">
+                    <button class="sync-btn" onclick="syncWithAI()">Sync Jobs</button>
+                </div>
+                <div class="uploaded-info" id="purged-info" style="display: none; padding-left: 10px;">
+                    <button class="purge-btn" onclick="purgeFromDB()">Purge Jobs</button>
+                </div>
             </div>
-            
-            <label for="country_indeed">Country</label>
-            <input type="text" id="country_indeed" name="country_indeed" value="india">
-                        
-            <label for="hours_old">Hours Old</label>
-            <input type="number" id="hours_old" name="hours_old" value="24">
-            
-            <button type="button" onclick="saveSettings()">Save</button>
-        </form>
+            <button class="settings-icon" onclick="openSidebar()">
+                ⚙️
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="upload-section" id="upload-section">
+            <div class="file file--upload">
+                <label for="input-file-upload">
+                    <i class="material-icons">cloud_upload</i> Upload
+                </label>
+                <input id="input-file-upload" type="file" onchange="handleFileUpload(event)" />
+            </div>
+        </div>
+        <div class="uploaded-info" id="uploaded-info" style="display: none;">
+            <div class="file-details">
+                <i class="material-icons">check_circle</i>
+                <span id="file-name"></span>
+            </div>
+        </div>
     </div>
-</div>
 
+    <div id="sidebar" class="sidebar">
+        <i class="material-icons close-icon close-btn" onclick="closeSidebar()">close</i>
+        <div class="sidebar-content">
+            <h2>Settings</h2>
+            <form id="settings-form">
+                <label for="Open AI model">Choose a Model</label>
+                <select name="Open AI model" id="Open AI model">
+                    <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                    <option value="gpt-4">gpt-4</option>
+                </select>
 
-<div class="job-listings">
-    <!-- Job cards will be dynamically added here -->
-</div>
+                <h3>Job Search Settings</h3>
 
-<div class="footer">
-    &copy; 2024 JobHunter
-</div>
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location">
+                <br/>
 
-<script src="/static/script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+                <label for="distance">Distance</label>
+                <input type="number" id="distance" name="distance" value="50">
+                <br/>
+
+                <label for="job_type">Job Type</label>
+                <select id="job_type" name="job_type" multiple>
+                    <option value="">Any</option>
+                    <option value="fulltime">Full Time</option>
+                    <option value="parttime">Part Time</option>
+                    <option value="contract">Contract</option>
+                    <option value="internship">Internship</option>
+                </select>
+                <br/>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="is_remote" name="is_remote" checked>
+                    <label for="is_remote">Is Remote</label>
+                </div>
+                <br/>
+
+                <label for="results_wanted">Results Wanted</label>
+                <input type="number" id="results_wanted" name="results_wanted" value="10">
+                <br/>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="easy_apply" name="easy_apply">
+                    <label for="easy_apply">Easy Apply</label>
+                </div>
+                <br/>
+
+                <label for="country_indeed">Country</label>
+                <input type="text" id="country_indeed" name="country_indeed" value="india">
+                <br/>
+
+                <label for="hours_old">Hours Old</label>
+                <input type="number" id="hours_old" name="hours_old" value="24">
+
+                <button type="button" onclick="saveSettings()">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="job-listings">
+        <!-- Job cards will be dynamically added here -->
+    </div>
+
+    <div class="footer">
+        &copy; 2024 JobHunter
+    </div>
+
+    <script src="/static/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </body>
+
 </html>

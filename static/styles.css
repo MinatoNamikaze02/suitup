@@ -1,24 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Danfo&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Rubik+Mono+One&display=swap');
 
 body {
-    font-family: 'Noto Sans', serif;
+    font-family: 'Noto Sans', sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
     margin: 0;
     padding: 0;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
+    overflow-x: hidden;
 }
 
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(51, 51, 51, 0.8); /* Glassy effect */
-    color: white;
-    padding: 10px 20px;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    padding: 15px 20px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .navbar-title {
     font-size: 24px;
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .settings-icon {
@@ -26,10 +29,14 @@ body {
     font-size: 24px;
     background: none;
     border: none;
-    color: white;
+    color: #ffffff;
     padding: 10px;
     border-radius: 50%;
     transition: background-color 0.3s;
+}
+
+.settings-icon:hover {
+    background-color: #333333;
 }
 
 .container {
@@ -37,15 +44,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    margin-bottom: 80px; /* Add margin to separate from footer */
-}
-
-.heading {
-    font-size: 12px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
+    padding: 40px;
+    margin-bottom: 80px;
 }
 
 .upload-section {
@@ -69,8 +69,8 @@ body {
     cursor: pointer;
     padding: 15px 30px;
     margin-bottom: 10px;
-    background-color: #007bff;
-    color: white;
+    background-color: #333333;
+    color: #ffffff;
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s;
@@ -81,7 +81,7 @@ body {
 }
 
 .file label:hover {
-    background-color: #0056b3;
+    background-color: #555555;
 }
 
 .file input {
@@ -92,13 +92,13 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: green;
+    color: #76ff03;
 }
 
 .uploaded-info .file-details {
     display: flex;
     align-items: center;
-    margin-bottom: 10px; /* Add margin to separate file details from the button */
+    margin-bottom: 10px;
 }
 
 .uploaded-info i {
@@ -110,14 +110,13 @@ body {
 }
 
 .footer {
-    background-color: #f1f1f1;
-    color: #333;
+    background-color: #1e1e1e;
+    color: #aaaaaa;
+    position: fixed;
     text-align: center;
     padding: 10px;
-    position: fixed;
     width: 100%;
     bottom: 0;
-    z-index: 0;
 }
 
 .sidebar {
@@ -126,7 +125,7 @@ body {
     position: fixed;
     top: 0;
     right: 0;
-    background-color: #f9f9f9;
+    background-color: #2c2c2c;
     overflow-x: hidden;
     transition: width 0.5s;
     box-shadow: -2px 0 5px rgba(0,0,0,0.5);
@@ -135,6 +134,7 @@ body {
 .sidebar-content {
     padding: 20px;
     margin-top: 50px;
+    color: #ffffff;
 }
 
 .close-btn {
@@ -143,6 +143,7 @@ body {
     right: 25px;
     font-size: 36px;
     cursor: pointer;
+    color: #ffffff;
 }
 
 .sidebar-content h2 {
@@ -163,39 +164,42 @@ body {
 .sidebar-content select {
     padding: 10px;
     margin-top: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid #444444;
+    background-color: #333333;
+    color: #ffffff;
     border-radius: 5px;
 }
 
 .sidebar-content button {
     padding: 10px;
-    background-color: #333;
+    background-color: #444444;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .sidebar-content button:hover {
-    background-color: #555;
+    background-color: #666666;
 }
 
-.sync-btn, .purge-btn{
+.sync-btn, .purge-btn {
     display: inline-block;
     padding: 10px 20px;
     font-size: 16px;
-    color: #fff;
-    background-color: #007bff;
+    color: #ffffff;
+    background-color: #444444;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 10px; /* Add margin to separate button from the file details */
+    margin-top: 10px;
 }
 
 .sync-btn:hover, .purge-btn:hover {
-    background-color: #0056b3;
+    background-color: #666666;
 }
 
 .sync-btn.loading, .purge-btn.loading {
@@ -204,7 +208,7 @@ body {
     opacity: 0.6;
 }
 
-.sync-btn.loading:after, .purge-btn.loading:after{
+.sync-btn.loading:after, .purge-btn.loading:after {
     content: "";
     position: absolute;
     top: 50%;
@@ -233,19 +237,19 @@ body {
 }
 
 .job-card {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
+    background-color: #1e1e1e;
+    border: 1px solid #333333;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     padding: 20px;
-    width: 300px; /* Adjust width for compact cards */
+    width: 300px;
     transition: transform 0.2s, box-shadow 0.2s;
     margin-bottom: 20px;
 }
 
 .job-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 .job-card-top {
@@ -268,24 +272,24 @@ body {
 
 .job-company {
     font-size: 1em;
-    color: #333;
+    color: #e0e0e0;
 }
 
 .job-time-posted {
     font-size: 0.8em;
-    color: #777;
+    color: #777777;
 }
 
 .job-title {
     font-size: 1.2em;
     margin: 10px 0;
-    color: #333;
+    color: #ffffff;
 }
 
 .job-type {
     display: inline-block;
-    background-color: #f1f1f1;
-    color: #777;
+    background-color: #333333;
+    color: #cccccc;
     padding: 5px 10px;
     border-radius: 15px;
     font-size: 0.8em;
@@ -294,9 +298,18 @@ body {
 
 .job-description {
     font-size: 0.9em;
-    color: #555;
+    color: #bbbbbb;
     margin-bottom: 15px;
     text-align: justify;
+}
+
+input[type="number"] {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #444444;
+    background-color: #333333;
+    color: #ffffff;
+    border-radius: 5px;
 }
 
 .apply-btn {
@@ -304,7 +317,7 @@ body {
     text-align: center;
     padding: 10px;
     background-color: #007bff;
-    color: #fff;
+    color: #ffffff;
     text-decoration: none;
     border-radius: 5px;
     margin-top: 10px;
@@ -315,17 +328,17 @@ body {
 }
 
 .details-section {
-    background-color: #f9f9f9;
-    border: 1px solid #e0e0e0;
+    background-color: #2c2c2c;
+    border: 1px solid #444444;
     border-radius: 8px;
     padding: 15px;
     width: 300px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .job-location, .job-compensation {
     font-size: 0.9em;
-    color: #555;
+    color: #bbbbbb;
     margin-bottom: 10px;
 }
