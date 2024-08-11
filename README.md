@@ -16,6 +16,7 @@ https://github.com/user-attachments/assets/18659935-f119-4bc4-8ed3-9c69ec07bf03
 ## What could go wrong?
 - Sync Errors: Occasionally, the tool might fail to sync, showing an error message like "Failed to sync." This usually happens because the initial extraction chain encountered an issue, which is expected with LLMs. If this occurs, simply retrigger the process, and it should work correctly.
 - Speed Issues: It could take a minute or two to load up. Check the logs for more info.
+- Jobpsy has certain rate limiting controls. If you want to tinker with the code to bring in proxies, be my guest.
 
 ## Notes
 This is a tool meant for personal use.
