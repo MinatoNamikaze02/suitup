@@ -11,7 +11,7 @@ Suit Up is an intelligent job tracking tool that combines the power of Generativ
 - For the rare ones who are way too talented and apply to several roles, this tool does multiple role searches in one go.
 
 # How it looks?
-<video src='https://github.com/MinatoNamikaze02/suitup/blob/master/assets/working.mov' width=50/>
+<video src='https://github.com/MinatoNamikaze02/suitup/blob/master/assets/working.mov'/>
 
 # What could go wrong?
 - Sync Errors: Occasionally, the tool might fail to sync, showing an error message like "Failed to sync." This usually happens because the initial extraction chain encountered an issue, which is expected with LLMs. If this occurs, simply retrigger the process, and it should work correctly.
