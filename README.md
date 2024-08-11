@@ -1,5 +1,5 @@
 ## Suit Up
-Suit Up is an intelligent job tracking tool that combines the power of Generative AI and Jobspy to help you keep track of jobs that match your skills. Simply upload your resume, and Suit Up will sync and display job listings from multiple sources, all in one place.
+Suit Up is an intelligent job tracking tool that combines the power of Generative AI and [jobspy](https://github.com/Bunsly/JobSpy) to help you keep track of jobs that match your skills. Simply upload your resume, and Suit Up will sync and display job listings from multiple sources, all in one place.
 
 ## What it does?
 
