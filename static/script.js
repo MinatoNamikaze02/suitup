@@ -1,3 +1,4 @@
+let jobs;
 window.onload = async function() {
     try {
         // Fetch settings data from the API
@@ -41,11 +42,15 @@ window.onload = async function() {
         if (!jobsResponse.ok) {
             throw new Error(`HTTP error! status: ${jobsResponse.status}`);
         }
-        const jobs = await jobsResponse.json();
+        jobs = await jobsResponse.json();
         if (!jobs.length) {
             alert('No jobs found. Please sync with AI to get job listings.');
             return
+        } else {
+            document.getElementById("dropdown").style.display = "block";
         }
+        
+        populateSearchTermDropdown(jobs);
         displayJobListings(jobs);
 
     } catch (error) {
@@ -53,12 +58,33 @@ window.onload = async function() {
         alert('Failed to load settings.');
     }
 }
+
 function openSidebar() {
     document.getElementById("sidebar").style.width = "500px";
 }
 
 function closeSidebar() {
     document.getElementById("sidebar").style.width = "0";
+}
+
+function populateSearchTermDropdown(jobs) {
+    const dropdown = document.getElementById('search-term-dropdown');
+    const uniqueSearchTerms = [...new Set(jobs.map(job => job.search_term))];
+
+    uniqueSearchTerms.forEach(term => {
+        const termElement = document.createElement('p');
+        termElement.innerText = term;
+        termElement.addEventListener('click', (e) => {
+            e.preventDefault();
+            filterJobsBySearchTerm(term)
+        });
+        dropdown.appendChild(termElement);
+    });
+}
+
+function filterJobsBySearchTerm(selectedTerm) {
+    const filteredJobs = jobs.filter(job => job.search_term === selectedTerm);
+    displayJobListings(filteredJobs);
 }
 
 async function saveSettings() {
@@ -164,6 +190,9 @@ async function purgeFromDB() {
 
 function displayJobListings(jobs) {
     const container = document.querySelector('.job-listings');
+
+    // Clear the container
+    container.innerHTML = '';
 
     jobs.forEach(job => {
         const jobCard = document.createElement('div');

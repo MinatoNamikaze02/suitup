@@ -15,7 +15,14 @@
             <div class="navbar-title">
                 SuitUp
             </div>
+            
             <div style="display: flex; flex-direction: row;">
+                <div class="dropdown" id="dropdown" style="display: none;">
+                    <button class="dropbtn">Filter by Search Term</button>
+                    <div class="dropdown-content" id="search-term-dropdown">
+                        <!-- Search terms will be dynamically added here -->
+                    </div>
+                </div>
                 <div class="uploaded-info" id="uploaded-info" style="display: none; padding-right: 10px;">
                     <button class="sync-btn" onclick="syncWithAI()">Sync Jobs</button>
                 </div>
@@ -30,6 +37,7 @@
     </nav>
 
     <div class="container">
+        
         <div class="upload-section" id="upload-section">
             <div class="file file--upload">
                 <label for="input-file-upload">

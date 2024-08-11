@@ -13,6 +13,7 @@ logger = get_logger(__name__)
 class JobPost(Base):
     __tablename__ = 'job_posts'
     id = Column(String, primary_key=True)
+    search_term = Column(String, nullable=True)
     site = Column(String, nullable=True)
     job_url = Column(String, nullable=True)
     job_url_direct = Column(String, nullable=True)
@@ -119,6 +120,7 @@ class JobScraper:
         for _, row in jobs_cleaned.iterrows():
             job_dict = row.to_dict()
             job_dict['id'] = self.generate_unique_id(row)
+            job_dict['search_term'] = search_term
             job_post = JobPost(**job_dict)
             session.add(job_post)
         try:
