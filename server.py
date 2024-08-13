@@ -69,16 +69,19 @@ async def sync_jobs():
             raise HTTPException(status_code=400, detail="Resume file not found")
 
         # Extract details from resume
-        resume_ext = ResumeTool(model="gpt-3.5-turbo")
-        resume_details = resume_ext.extract_resume_details(resume_file_path)
-        dict_repr = resume_details[0].dict()
-
-        # Save user info to JSON file
-        with open("user_info.json", "w") as f:
-            json.dump(dict_repr, f)
+        resume_ext = ResumeTool(model=config.get("GenAI", {}).get("openAIModel", "gpt-3.5-turbo-instruct"))
+        if not os.path.exists("user_info.json"):
+            resume_details = resume_ext.extract_resume_details(resume_file_path)
+            dict_repr = resume_details[0].dict()
+            # Save user info to JSON file
+            with open("user_info.json", "w") as f:
+                json.dump(dict_repr, f)
+        else:
+            with open("user_info.json", "r") as f:
+                dict_repr = json.load(f)
 
         # Extract job search settings
-        job_search_settings = resume_ext.extract_job_search_details(dict_repr)
+        job_search_settings = resume_ext.extract_job_search_details_v2(dict_repr)
 
         # Apply default values for empty AI results
         for key, value in job_search_settings.items():

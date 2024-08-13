@@ -17,4 +17,4 @@ hyperlinks = true
 resumeFilePath = "resume_uploads/Akash.pdf"
 
 [GenAI]
-openAIModel = "gpt-4"
+openAIModel = "gpt-3.5-turbo"
