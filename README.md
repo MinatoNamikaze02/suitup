@@ -4,7 +4,10 @@ Suit Up is an intelligent job tracking tool that combines the power of Generativ
 ## What it does?
 
 - Converts resume into json through an extraction chain.
-- identifies specific information (like location and search terms) which is used to scrape alongside other filters from multiple sources like linkedin, indeed, etc
+- Uses an autogen group-chat to identify potential roles, locations & job_types which are essential to scrape jobs.
+
+<img width="1619" alt="Screenshot 2024-08-14 at 00 05 31" src="https://github.com/user-attachments/assets/0537b718-c814-452d-8b09-a251fda632a9">
+
 
 ## Why use this?
 - Firstly, this removes the painful process of manually searching for jobs in different listing websites.
