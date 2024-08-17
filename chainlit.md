@@ -1,14 +1,65 @@
-# Welcome to Chainlit! 🚀🤖
+## Suit Up
+Suit Up is a smart job search assistant that leverages Generative AI and [Jobspy](https://github.com/Bunsly/JobSpy) to track job opportunities that match your skills. By simply uploading your resume, Suit Up will scan and display relevant job listings from multiple sources, all in one centralized location. 
 
-Hi there, Developer! 👋 We're excited to have you on board. Chainlit is a powerful tool designed to help you prototype, debug and share applications built on top of LLMs.
+## What it does?
 
-## Useful Links 🔗
+- Converts resume into json through an extraction chain.
+- Uses an [autogen](https://microsoft.github.io/autogen/) group chat to identify potential search terms (roles), job types(fulltime, parttime, contract, internships) and location preferences.
+- Uses [Jobpsy](https://github.com/Bunsly/JobSpy) to search for jobs based on preferences.
+- Uses [Vanna](https://vanna.ai/) to let you control the data with simple human language.
 
-- **Documentation:** Get started with our comprehensive [Chainlit Documentation](https://docs.chainlit.io) 📚
-- **Discord Community:** Join our friendly [Chainlit Discord](https://discord.gg/k73SQ3FyUh) to ask questions, share your projects, and connect with other developers! 💬
+## What you can do with it?
+- At any point of time you can
+  - Sync for a resume
+  - Modify the resume
+  - Retry extraction process for the same resume with a new seed
+  - Change location, radius of search, job type, remote jobs, result count and much more.
+  - Display as markdown or card-layout, whatever you like.
+  - Control what model you want to be using.
+  - **Filter and play around with the data with simple text queries**
 
-We can't wait to see what you create with Chainlit! Happy coding! 💻😊
+## How to use
+1. Setup vanna and open ai
+  - Get your vanna credentials [here](https://vanna.ai/) and populate your `.env` based on `config.py` in root.
+  - Get your open ai api key and add it to `.env`
+2. Install Requirements
+```
+$ pip install -r requirements.txt
+```
+3. Train vanna
+```
+$ python AI/training.py
+```
+4. Run the App
+```
+$ chainlit run chainlit.py
+```
 
-## Welcome screen
+### Settings
+You can edit the settings and save them directly from the chainlit web client [http://localhost:8000](http://localhost:8000).
+The following settings are available:
+```
+model: Options["gpt-3.5-turbo", "gpt-4"]
+location: str (CITY, STATE)
+distance: int
+Job Type: Options["Any" , "fulltime", "parttime", "contract", "internship"]
+is_remote: bool
+results_wanted: int
+easy_apply: bool (only for linkedIn)
+display as markdown: bool (this is to enable tablular view of data)
+country: str
+hours_old: int
+```
 
-To modify the welcome screen, edit the `chainlit.md` file at the root of your project. If you do not want a welcome screen, just leave this file empty.
+## How it looks?
+![implementation.png](https://github.com/MinatoNamikaze02/suitup/blob/master/assets/Screenshot%202024-08-17%20at%2015.02.22.png)
+![implementation2.png](https://github.com/MinatoNamikaze02/suitup/blob/master/assets/Screenshot%202024-08-17%20at%2015.02.53.png)
+![implementation3.png](https://github.com/MinatoNamikaze02/suitup/blob/master/assets/Screenshot%202024-08-17%20at%2015.03.07.png)
+
+## What could go wrong?
+- Sync Errors: Occasionally, the tool might fail to sync. This usually happens because the initial extraction chain encountered an issue, which is expected with LLMs. If this occurs, simply retrigger the process, and it should work correctly.
+- Speed Issues: It could take a minute or two to load up. Check the logs for more info.
+- Jobpsy has certain rate limiting controls. If you want to tinker with the code to bring in proxies, be my guest.
+
+## Notes
+This is a tool meant for personal use.

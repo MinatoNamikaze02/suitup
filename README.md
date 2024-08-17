@@ -1,15 +1,22 @@
 ## Suit Up
-Suit Up is an intelligent job scraping tool that combines the power of Generative AI and [jobspy](https://github.com/Bunsly/JobSpy) to help you keep track of jobs that match your skills. Simply upload your resume, and Suit Up will sync and display job listings from multiple sources, all in one place. 
+Suit Up is a smart job search assistant that leverages Generative AI and [Jobspy](https://github.com/Bunsly/JobSpy) to track job opportunities that match your skills. By simply uploading your resume, Suit Up will scan and display relevant job listings from multiple sources, all in one centralized location. 
 
 ## What it does?
 
 - Converts resume into json through an extraction chain.
 - Uses an [autogen](https://microsoft.github.io/autogen/) group chat to identify potential search terms (roles), job types(fulltime, parttime, contract, internships) and location preferences.
+- Uses [Jobpsy](https://github.com/Bunsly/JobSpy) to search for jobs based on preferences.
+- Uses [Vanna](https://vanna.ai/) to let you control the data with simple human language.
 
-## Why use this?
-- Firstly, this removes the painful process of manually searching for jobs in different listing websites.
-- For the rare ones who are way too talented and apply to several roles, this tool does multiple role searches in one go.
-- Uses vanna to let you filter and interact with the data using textual queries.
+## What you can do with it?
+- At any point of time you can
+  - Sync for a resume
+  - Modify the resume
+  - Retry extraction process for the same resume with a new seed
+  - Change location, radius of search, job type, remote jobs, result count and much more.
+  - Display as markdown or card-layout, whatever you like.
+  - Control what model you want to be using.
+  - **Filter and play around with the data with simple text queries**
 
 ## How to use
 1. Setup vanna and open ai
@@ -26,6 +33,22 @@ $ python AI/training.py
 4. Run the App
 ```
 $ chainlit run chainlit.py
+```
+
+### Settings
+You can edit the settings and save them directly from the chainlit web client [http://localhost:8000](http://localhost:8000).
+The following settings are available:
+```
+model: Options["gpt-3.5-turbo", "gpt-4"]
+location: str (CITY, STATE)
+distance: int
+Job Type: Options["Any" , "fulltime", "parttime", "contract", "internship"]
+is_remote: bool
+results_wanted: int
+easy_apply: bool (only for linkedIn)
+display as markdown: bool (this is to enable tablular view of data)
+country: str
+hours_old: int
 ```
 
 ## How it looks?
