@@ -12,20 +12,20 @@ Suit Up is an intelligent job scraping tool that combines the power of Generativ
 - Uses vanna to let you filter and interact with the data using textual queries.
 
 ## How to use
-0. Setup vanna and open ai
+1. Setup vanna and open ai
   - Get your vanna credentials [here](https://vanna.ai/) and populate your `.env` based on `config.py` in root.
   - Get your open ai api key and add it to `.env`
-1. Install Requirements
+2. Install Requirements
 ```
 $ pip install -r requirements.txt
 ```
-2. Train vanna
+3. Train vanna
 ```
 $ python AI/training.py
 ```
-3. Run the App
+4. Run the App
 ```
-chainlit run chainlit.py
+$ chainlit run chainlit.py
 ```
 
 ## How it looks?
