@@ -2,19 +2,19 @@
 site_name = [ "indeed", "linkedin", "glassdoor",]
 search_term = ""
 location = "india"
-distance = 100
+distance = 50
 job_type = "fulltime"
 is_remote = true
-results_wanted = 50
-easy_apply = true
+results_wanted = 10
+easy_apply = false
 country_indeed = "india"
 offset = 0
-hours_old = 48
+hours_old = 24
 verbose = false
 hyperlinks = true
 
 [Resume]
-resumeFilePath = "resume_uploads/Akash.pdf"
+resumeFilePath = "resume_uploads/arjhun_cv_for_special_purposes.pdf"
 
 [GenAI]
 openAIModel = "gpt-3.5-turbo"

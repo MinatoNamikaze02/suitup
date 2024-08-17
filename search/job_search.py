@@ -43,6 +43,10 @@ class JobPost(Base):
     ceo_name = Column(String, nullable=True)
     ceo_photo_url = Column(String, nullable=True)
     job_function = Column(String, nullable=True)
+    # salary_source = Column(String, nullable=True)
+    # job_level = Column(String, nullable=True)
+    # listing_type = Column(String, nullable=True)
+    # company_industry_tags = Column(String, nullable=True)
 
 def setup_database(database_uri='sqlite:///jobs.db'):
     engine = create_engine(database_uri)
@@ -113,21 +117,32 @@ class JobScraper:
             verbose=verbose,
             hyperlinks=hyperlinks
         )        
-        jobs = self.process_df(jobs)
-        logger.info(f"Job posts scraped successfully!")
+        logger.info("Job posts scraped successfully!")
+
+        # Get valid fields from JobPost
+        valid_fields = {column.name for column in JobPost.__table__.columns}
+
+        # Process the DataFrame
+        df = self.process_df(jobs)
+
+        # Filter out any columns not in the JobPost schema
+        df = df[[col for col in df.columns if col in valid_fields]]
+
         session = self.Session()
-        jobs_cleaned = jobs.where(pd.notnull(jobs), None)
+        jobs_cleaned = df.where(pd.notnull(df), None)
+
         for _, row in jobs_cleaned.iterrows():
             job_dict = row.to_dict()
             job_dict['id'] = self.generate_unique_id(row)
             job_dict['search_term'] = search_term
             job_post = JobPost(**job_dict)
             session.add(job_post)
+
         try:
             session.commit()
             logger.info("Job posts saved successfully!")
         except Exception as e:
-            logger.error("Error saving job posts: {e}")
+            logger.error(f"Error saving job posts: {e}")
             session.rollback()
             raise
         finally:

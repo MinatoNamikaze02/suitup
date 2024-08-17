@@ -42,11 +42,17 @@ async def upload_resume(resume: UploadFile = File(...)):
         file_path = os.path.join(UPLOAD_DIR, resume.filename)
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(resume.file, buffer)
+            
         # Save resume file path to config.toml
         config = utils.load_config()
         config['Resume']['resumeFilePath'] = file_path
+
         with open(CONFIG_PATH, 'w') as config_file:
             toml.dump(config, config_file)
+
+        if os.path.exists("user_info.json"):
+            os.remove("user_info.json")
+
         return JSONResponse(content={"filename": resume.filename})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

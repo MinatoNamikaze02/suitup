@@ -70,7 +70,7 @@ class ResumeTool():
                 - For "job_type", interpret the context to identify the type of employment being sought, if stated.
                 - The "country_indeed" should be inferred from the location provided. Kindly default to empty strings if the information is not available.
 
-                Once you have approved the JSON, ask the Extractor to return the data to the Admin as the final step.
+                Once you have approved the JSON, ask the Extractor to return the data to the Admin as the final step. If not, be firm and ask the extractor to return data back to you.
             """
         )
 
@@ -90,7 +90,7 @@ class ResumeTool():
             message=f"""
                 You are a detail-oriented assistant tasked with extracting key employment-related information from the parsed contents of a resume. Please return the information in JSON format with the following details:
 
-                1. search_term: A list of strings containing job titles and roles, focusing on the level of seniority"
+                1. search_term: A list of strings containing job titles and roles, focusing on the level of seniority. Try to identify the senior most role mentioned in the resume and if deemed necessary add some other roles similar to that one. If no job title is explicitly mentioned, use the most relevant information available.
 
                 2. location: The geographical location specified in the resume, presented as "city, region" within the country.
 
