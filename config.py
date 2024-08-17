@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     open_ai_api_key: Optional[str] = None
     upload_dir: Optional[str] = 'uploads'
     config_path: Optional[str] = 'config.toml'
+    vanna_model_name: Optional[str]
+    vanna_api_key: Optional[str]
+
     
     class Config:
         env_file = f'.env'

@@ -1,9 +1,9 @@
 [JobSearch]
 site_name = [ "indeed", "linkedin", "glassdoor",]
 search_term = ""
-location = "india"
+location = "Bengaluru, KA"
 distance = 50
-job_type = "fulltime"
+job_type = "Any"
 is_remote = true
 results_wanted = 10
 easy_apply = false
@@ -18,3 +18,6 @@ resumeFilePath = "resume_uploads/arjhun_cv_for_special_purposes.pdf"
 
 [GenAI]
 openAIModel = "gpt-3.5-turbo"
+
+[Display]
+display_as_markdown = false

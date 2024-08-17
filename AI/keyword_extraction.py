@@ -66,10 +66,11 @@ class ResumeTool():
             Keep the following things in mind while evaluating.
                 - The "search_term" should not include skills as such but industry-specific job titles or roles.
                 - Remember that the "search_term" cannot be empty. If no job title is explicitly mentioned, use the most relevant information available. 
+                - Search term should respect seniority levels. Seniority should be understood based on the years of experience totally. If the highest role of a person is "Software Engineer", then the search term could be "Software Engineer" or "Software Engineer II" or "Senior Software Engineer" etc.
                 - "Location" should be extracted with an emphasis on the most specific geographical detail available, ideally pinpointing the job seeker's preferred work location.
                 - For "job_type", interpret the context to identify the type of employment being sought, if stated.
                 - The "country_indeed" should be inferred from the location provided. Kindly default to empty strings if the information is not available.
-
+                Be extremely critical of the data and provide feedback to the Extractor.
                 Once you have approved the JSON, ask the Extractor to return the data to the Admin as the final step. If not, be firm and ask the extractor to return data back to you.
             """
         )
@@ -90,7 +91,7 @@ class ResumeTool():
             message=f"""
                 You are a detail-oriented assistant tasked with extracting key employment-related information from the parsed contents of a resume. Please return the information in JSON format with the following details:
 
-                1. search_term: A list of strings containing job titles and roles, focusing on the level of seniority. Try to identify the senior most role mentioned in the resume and if deemed necessary add some other roles similar to that one. If no job title is explicitly mentioned, use the most relevant information available.
+                1. search_term: A list of strings containing job titles and roles, focusing on the level of seniority. Try to identify the senior most role mentioned in the resume and feel free to add some other well-known roles similar to that one.
 
                 2. location: The geographical location specified in the resume, presented as "city, region" within the country.
 

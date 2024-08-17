@@ -4,9 +4,8 @@ import shutil
 import json
 import toml
 import traceback
-import html
-import markdown
 
+import AI.utils as vanna_utils
 from chainlit.input_widget import Select, TextInput, NumberInput, Switch
 from AI.keyword_extraction import ResumeTool
 from search.job_search import JobScraper
@@ -22,6 +21,47 @@ CONFIG_PATH = settings.config_path
 
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
+
+@cl.step(type="run", name="Analyst")
+async def chain(human_query: str):
+    config = utils.load_config()
+    sql_query = await vanna_utils.gen_query(human_query)
+    result, error = await vanna_utils.execute_query(sql_query)
+
+    if error:
+        await cl.Message(content="Some Error Occurred! Please try again", author="AI Analyst").send()
+        return
+
+    if config.get("Display", {}).get("display_as_markdown", False):
+        await cl.Message(content=result.to_markdown(), author="AI Analyst").send()
+    else:
+        for jobs in result.to_dict(orient="records"):
+            card_content = utils.jobs_to_valid_html(jobs)
+            await cl.Message(content=card_content, author="AI Analyst").send()
+
+@cl.on_settings_update
+async def handle_settings_update(settings: dict):
+    try:
+        config = utils.load_config()
+                
+        for key, value in settings.items():
+            if key in config["JobSearch"]:
+                config["JobSearch"][key] = value
+            if key in config["GenAI"]:
+                config["GenAI"][key] = value
+            if key in config["Display"]:
+                config["Display"][key] = value
+
+        # Save updated settings
+        utils.save_config(config)
+
+        await cl.Message(content="Settings updated successfully").send()
+    except Exception as e:
+        await cl.Message(content=f"Error updating settings: {str(e)}").send()
+
+@cl.on_message
+async def on_message(message: cl.Message):
+    await chain(message.content)
 
 @cl.action_callback("Sync Jobs")
 async def sync_jobs(action):
@@ -92,6 +132,18 @@ async def upload_resume(action):
         except Exception as e:
             await cl.Message(content=f"Error uploading resume: {str(e)}").send()
 
+@cl.action_callback("Reset cache seed")
+async def reset_cache_seed(action):
+    # delete .cache folder
+    if os.path.exists(".cache"):
+        shutil.rmtree(".cache")
+
+    if os.path.exists("user_info.json"):
+        os.remove("user_info.json")
+
+    msg = await cl.Message(content="Cache seed reset successfully").send()
+    await cl.Action(name="Sync Jobs", value="sync_jobs").send(for_id=msg.id)
+
 @cl.action_callback("Purge Jobs")
 async def purge_jobs(action):
     try:
@@ -99,6 +151,7 @@ async def purge_jobs(action):
             os.remove("jobs.db")
         msg = await cl.Message(content="Jobs purged successfully").send()
         await cl.Action(name="Sync Jobs", value="sync_jobs").send(for_id=msg.id)
+        await cl.Action(name="Reset cache seed", value="reset_cache_seed").send(for_id=msg.id)
     except Exception as e:
         await cl.Message(content=f"Error purging jobs: {str(e)}").send()
 
@@ -108,52 +161,7 @@ async def view_jobs(action):
     jobs = job_scraper.get_all_jobs()
 
     for job in jobs:
-        logo_url = job.get("logo_photo_url", "")
-        title = job.get("title", "No Title")
-        compensation = job.get("compensation", "Not specified")
-        job_type = job.get("job_type", "Unknown")
-        site = job.get("site", "No site")
-        description = job.get("description", "No Description")
-        apply_link = job.get("job_url_direct", "#")
-        date_posted = job.get("date_posted", "No date")
-        company_name = job.get("company", "No company")
-
-        
-        description_cutoff = description[:300] + "..." if len(description) > 300 else description
-        # Escape HTML tags in the description
-        description_cutoff = html.escape(description_cutoff)
-        # Convert markdown to HTML if necessary
-        description_cutoff = markdown.markdown(description_cutoff)
-
-        if not description_cutoff:
-            description_cutoff = "No Description Provided"
-
-        if not logo_url:
-            logo_url = "https://via.placeholder.com/50"
-
-        if not job_type:
-            job_type = "Unknown"
-
-        card_content = f"""
-        <div style="border: 0.5px solid #ddd; border-radius: 10px; padding: 16px; margin: 16px 0; max-width: 600px; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);">
-            <div style="display: flex; align-items: center;">
-                <img src="{logo_url}" alt="Company Logo" style="width: 50px; height: 50px; object-fit: contain; margin-right: 16px;">
-                <div style="flex-grow: 1;">
-                    <h3 style="margin: 0; font-size: 18px; font-weight: bold;">{title}</h3>
-                    <p style="margin: 4px 0 0; font-size: 14px; color: #555;">{company_name} - {job_type} - {site}</p>
-                    <p style="margin: 4px 0 0; font-size: 14px; color: #888;">Posted on {date_posted}</p>
-                </div>
-            </div>
-            <div style="margin-top: 16px;">
-                <div style="margin: 0; font-size: 14px; color: #ddd;">
-                    {description_cutoff}
-                </div>
-                <p style="margin: 8px 0 0; font-size: 14px; font-weight: bold; color: #333;">Compensation: {compensation}</p>
-                <a href="{apply_link}" target="_blank" style="display: inline-block; margin-top: 16px; padding: 8px 16px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 4px;">Apply Now</a>
-            </div>
-        </div>
-        """
-
+        card_content = utils.jobs_to_valid_html(job)
         msg = await cl.Message(content=card_content).send()
 
     await cl.Action(name="Purge Jobs", value="purge_jobs").send(for_id=msg.id)
@@ -205,6 +213,13 @@ async def on_chat_start():
             label="Easy Apply",
             initial=config.get("Job Search", {}).get("easy_apply", False)
         ),
+
+        Switch(
+            id="display_as_markdown",
+            label="Display as Markdown",
+            initial=config.get("Display", {}).get("display_as_markdown", False)
+        ),
+
         TextInput(
             id="country_indeed",
             label="Country",
@@ -227,6 +242,7 @@ async def on_chat_start():
     elif not os.path.exists("jobs.db"):
         msg = await cl.Message(content="Resume found, but no jobs synced yet.").send()
         await cl.Action(name="Sync Jobs", value="sync_jobs").send(for_id=msg.id)
+        await cl.Action(name="Reset cache seed", value="reset_cache_seed").send(for_id=msg.id)
     else:
         msg = await cl.Message(content="Jobs are available.").send()
         await cl.Action(name="View Jobs", value="view_jobs").send(for_id=msg.id)
