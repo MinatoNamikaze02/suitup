@@ -61,6 +61,9 @@ async def handle_settings_update(settings: dict):
 
 @cl.on_message
 async def on_message(message: cl.Message):
+    if not os.path.exists("jobs.db"):
+        await cl.Message(content="No jobs synced yet. Please sync jobs first.").send()
+        return
     await chain(message.content)
 
 @cl.action_callback("Sync Jobs")
