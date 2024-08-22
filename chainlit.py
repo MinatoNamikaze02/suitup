@@ -22,22 +22,24 @@ CONFIG_PATH = settings.config_path
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
 
-@cl.step(type="run", name="Analyst")
+global_settings = {}
+
+@cl.step(type="run", name="Jobs Analyst")
 async def chain(human_query: str):
     config = utils.load_config()
     sql_query = await vanna_utils.gen_query(human_query)
     result, error = await vanna_utils.execute_query(sql_query)
 
     if error:
-        await cl.Message(content="Some Error Occurred! Please try again", author="AI Analyst").send()
+        await cl.Message(content=result, author="Jobs Analyst").send()
         return
 
     if config.get("Display", {}).get("display_as_markdown", False):
-        await cl.Message(content=result.to_markdown(), author="AI Analyst").send()
+        await cl.Message(content=result.to_markdown(), author="Jobs Analyst").send()
     else:
         for jobs in result.to_dict(orient="records"):
             card_content = utils.jobs_to_valid_html(jobs)
-            await cl.Message(content=card_content, author="AI Analyst").send()
+            await cl.Message(content=card_content, author="Jobs Analyst").send()
 
 @cl.on_settings_update
 async def handle_settings_update(settings: dict):
@@ -55,9 +57,9 @@ async def handle_settings_update(settings: dict):
         # Save updated settings
         utils.save_config(config)
 
-        await cl.Message(content="Settings updated successfully").send()
+        await cl.Message(content="Settings updated successfully", author="Jobs Analyst").send()
     except Exception as e:
-        await cl.Message(content=f"Error updating settings: {str(e)}").send()
+        await cl.Message(content=f"Error updating settings: {str(e)}", author="Jobs Analyst").send()
 
 @cl.on_message
 async def on_message(message: cl.Message):
@@ -72,7 +74,7 @@ async def sync_jobs(action):
         config = utils.load_config()
         resume_file_path = config.get("Resume", {}).get("resumeFilePath", "")
         if not os.path.exists(resume_file_path):
-            await cl.Message(content="Resume file not found").send()
+            await cl.Message(content="Resume file not found", author="Jobs Analyst").send()
             return
 
         resume_ext = ResumeTool(model=config.get("GenAI", {}).get("openAIModel", "gpt-3.5-turbo-instruct"))
@@ -102,11 +104,47 @@ async def sync_jobs(action):
             args["search_term"] = term
             job_scraper.scrape_and_save(**args)
 
-        msg = await cl.Message(content="Jobs synced successfully").send()
+        msg = await cl.Message(content="Jobs synced successfully", author="Jobs Analyst").send()
         await cl.Action(name="View Jobs", value="view_jobs").send(for_id=msg.id)
     except Exception as e:
         logger.error(traceback.format_exc())
-        await cl.Message(content=f"Error syncing jobs: {str(e)}").send()
+        await cl.Message(content=f"Error syncing jobs: {str(e)}", author="Jobs Analyst").send()
+
+@cl.action_callback("Upload New Resume")
+async def upload_new_resume(action):
+    config = utils.load_config()
+
+    files = await cl.AskFileMessage(
+        content="Please upload your resume to continue", accept=["text/plain", "application/pdf"]
+    ).send()
+
+    if os.path.exists(config.get("Resume", {}).get("resumeFilePath", "")):
+        os.remove(config.get("Resume", {}).get("resumeFilePath", ""))
+
+    if files:
+        resume = files[0]
+        try:
+            file_path = os.path.join(UPLOAD_DIR, resume.name)
+            # read the pdf contents
+            with open(resume.path, "rb") as content:
+                resume_content = content.read()
+
+            with open(file_path, "wb") as buffer:
+                buffer.write(resume_content)
+
+            config['Resume']['resumeFilePath'] = file_path
+
+            with open(CONFIG_PATH, 'w') as config_file:
+                toml.dump(config, config_file)
+
+            if os.path.exists("user_info.json"):
+                os.remove("user_info.json")
+
+            msg = await cl.Message(content=f"Resume uploaded: {resume.name}", author="Jobs Analyst").send()
+            await cl.Action(name="Sync Jobs", value="sync_jobs").send(for_id=msg.id)
+        except Exception as e:
+            await cl.Message(content=f"Error uploading resume: {str(e)}", author="Jobs Analyst").send()
+
 
 @cl.action_callback("Upload Resume")
 async def upload_resume(action):
@@ -117,9 +155,14 @@ async def upload_resume(action):
     if files:
         resume = files[0]
         try:
-            file_path = os.path.join(UPLOAD_DIR, resume.filename)
+            file_path = os.path.join(UPLOAD_DIR, resume.name)
+
+            # read the pdf contents
+            with open(resume.path, "rb") as content:
+                resume_content = content.read()
+
             with open(file_path, "wb") as buffer:
-                shutil.copyfileobj(resume.file, buffer)
+                buffer.write(resume_content)
 
             config = utils.load_config()
             config['Resume']['resumeFilePath'] = file_path
@@ -130,10 +173,10 @@ async def upload_resume(action):
             if os.path.exists("user_info.json"):
                 os.remove("user_info.json")
 
-            msg = await cl.Message(content=f"Resume uploaded: {resume.filename}").send()
+            msg = await cl.Message(content=f"Resume uploaded: {resume.name}", author="Jobs Analyst").send()
             await cl.Action(name="Sync Jobs", value="sync_jobs").send(for_id=msg.id)
         except Exception as e:
-            await cl.Message(content=f"Error uploading resume: {str(e)}").send()
+            await cl.Message(content=f"Error uploading resume: {str(e)}", author="Jobs Analyst").send()
 
 @cl.action_callback("Reset cache seed")
 async def reset_cache_seed(action):
@@ -144,25 +187,27 @@ async def reset_cache_seed(action):
     if os.path.exists("user_info.json"):
         os.remove("user_info.json")
 
-    msg = await cl.Message(content="Cache seed reset successfully").send()
-    await cl.Action(name="Sync Jobs", value="sync_jobs").send(for_id=msg.id)
+    msg = await cl.Message(content="Cache seed reset successfully", author="Jobs Analyst").send()
+    await cl.Action(name="Sync Jobs", value="sync_jobs", author="Jobs Analyst").send(for_id=msg.id)
 
 @cl.action_callback("Purge Jobs")
 async def purge_jobs(action):
     try:
         if os.path.exists("jobs.db"):
             os.remove("jobs.db")
-        msg = await cl.Message(content="Jobs purged successfully").send()
+        msg = await cl.Message(content="Jobs purged successfully", author="Jobs Analyst").send()
         await cl.Action(name="Sync Jobs", value="sync_jobs").send(for_id=msg.id)
+        await cl.Action(name="Upload New Resume", value="upload_resume").send(for_id=msg.id)
         await cl.Action(name="Reset cache seed", value="reset_cache_seed").send(for_id=msg.id)
     except Exception as e:
-        await cl.Message(content=f"Error purging jobs: {str(e)}").send()
+        await cl.Message(content=f"Error purging jobs: {str(e)}", author="Jobs Analyst").send()
 
 @cl.action_callback("View Jobs")
 async def view_jobs(action):
-    job_scraper = JobScraper()
+    job_scraper = global_settings.get("job_scraper")
     jobs = job_scraper.get_all_jobs()
 
+    msg = await cl.Message(content="Jobs Scraped:", author="Jobs Analyst").send()
     for job in jobs:
         card_content = utils.jobs_to_valid_html(job)
         msg = await cl.Message(content=card_content).send()
@@ -172,7 +217,9 @@ async def view_jobs(action):
 @cl.on_chat_start
 async def on_chat_start():
     config = utils.load_config()
+    job_scraper = JobScraper()
     
+    global_settings["job_scraper"] = job_scraper
     settings = [
         Select(
             id="Open AI model",
@@ -195,7 +242,7 @@ async def on_chat_start():
         Select(
             id="job_type",
             label="Job Type",
-            values=["Any", "Full Time", "Part Time", "Contract", "Internship"],
+            values=["fulltime", "parttime", "contract", "internship"],
             initial_index=0,
             multiple=True
         ),
@@ -240,14 +287,15 @@ async def on_chat_start():
     resume_file_path = config.get("Resume", {}).get("resumeFilePath", "")
 
     if not os.path.exists(resume_file_path):
-        msg = await cl.Message(content="No resume found. Please upload your resume.").send()
+        msg = await cl.Message(content="No resume found. Please upload your resume.",  author="Jobs Analyst").send()
         await cl.Action(name="Upload Resume", value="upload_resume").send(for_id=msg.id)
     elif not os.path.exists("jobs.db"):
-        msg = await cl.Message(content="Resume found, but no jobs synced yet.").send()
+        msg = await cl.Message(content="Resume found, but no jobs synced yet.", author="Jobs Analyst").send()
         await cl.Action(name="Sync Jobs", value="sync_jobs").send(for_id=msg.id)
+        await cl.Action(name="Upload New Resume", value="upload_resume").send(for_id=msg.id)
         await cl.Action(name="Reset cache seed", value="reset_cache_seed").send(for_id=msg.id)
     else:
-        msg = await cl.Message(content="Jobs are available.").send()
+        msg = await cl.Message(content="Jobs are available.", author="Jobs Analyst").send()
         await cl.Action(name="View Jobs", value="view_jobs").send(for_id=msg.id)
         await cl.Action(name="Purge Jobs", value="purge_jobs").send(for_id=msg.id)
 
