@@ -1,5 +1,5 @@
 ## Suit Up
-Suit Up is a smart job search assistant that leverages Generative AI and [Jobspy](https://github.com/Bunsly/JobSpy) to track job opportunities that match your skills. By simply uploading your resume, Suit Up will scan and display relevant job listings from multiple sources, all in one centralized location. 
+Suit Up is a smart job search pipeline that leverages Generative AI, [Jobspy](https://github.com/Bunsly/JobSpy) and VannaAI to track job opportunities that match your skills. By simply uploading your resume, Suit Up will scan and display relevant job listings from multiple sources, all in one centralized location. You can also play around with this data based on need with simple text queries.
 
 ## What it does?
 
@@ -7,6 +7,7 @@ Suit Up is a smart job search assistant that leverages Generative AI and [Jobspy
 - Uses an [autogen](https://microsoft.github.io/autogen/) group chat to identify potential search terms (roles), job types(fulltime, parttime, contract, internships) and location preferences.
 - Uses [Jobpsy](https://github.com/Bunsly/JobSpy) to search for jobs based on preferences.
 - Uses [Vanna](https://vanna.ai/) to let you control the data with simple human language.
+- Agents are specifically trained to look out of potential job roles you could be a good fit for. 
 
 ## What you can do with it?
 - At any point of time you can
@@ -39,7 +40,7 @@ $ chainlit run chainlit.py
 You can edit the settings and save them directly from the chainlit web client [http://localhost:8000](http://localhost:8000).
 The following settings are available:
 ```
-model: Options["gpt-3.5-turbo", "gpt-4"]
+model: Options["gpt-3.5-turbo", "gpt-4", (or any other OpenAI model)]
 location: str (CITY, STATE)
 distance: int
 Job Type: Options["Any" , "fulltime", "parttime", "contract", "internship"]
@@ -62,4 +63,4 @@ hours_old: int
 - Jobpsy has certain rate limiting controls. If you want to tinker with the code to bring in proxies, be my guest.
 
 ## Notes
-This is a tool meant for personal use.
+- This is a tool meant for personal use.
