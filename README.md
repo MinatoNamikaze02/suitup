@@ -1,5 +1,5 @@
 ## Suit Up
-Suit Up is a smart job search pipeline that leverages Generative AI, [Jobspy](https://github.com/Bunsly/JobSpy) and VannaAI to track job opportunities that match your skills. By simply uploading your resume, Suit Up will scan and display relevant job listings from multiple sources, all in one centralized location. You can also play around with this data based on need with simple text queries.
+Suit Up is a smart job search pipeline that leverages Generative AI, Jobspy and VannaAI to track job opportunities that match your skills. By simply uploading your resume, Suit Up will scan and display relevant job listings from multiple sources, all in one centralized location. You can also play around with this data based on need with simple text queries.
 
 ## What it does?
 
