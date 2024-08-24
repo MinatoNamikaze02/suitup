@@ -36,7 +36,6 @@ class ResumeTool():
     def extract_job_search_details_v2(self, extracted_content):
         config = [{
             "model": self.model,
-            # "base_url": "http://localhost:11434/v1",
             "api_key": settings.open_ai_api_key
         }]
         llm_config = {
@@ -68,7 +67,7 @@ class ResumeTool():
         )
 
         allowed_transitions_dict = {
-            user_proxy: [extractor],
+            user_proxy: [],
             extractor: [critique, user_proxy],
             critique: [extractor]
         }
@@ -87,6 +86,16 @@ class ResumeTool():
                 Ensure that the final message is always from the Admin. 
             """,
         )
-    
-        print(manager.groupchat.messages[-2])
-        return json.loads(manager.groupchat.messages[-2].get("content"))
+
+        final_json = None
+        # go in reverse and find the first message that is json parseable
+
+        for message in reversed(group_chat.messages):
+            try:
+                final_json = json.loads(message.get("content"))
+                break
+            except:
+                pass
+        
+        print(final_json)
+        return final_json

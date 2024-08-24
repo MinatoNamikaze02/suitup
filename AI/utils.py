@@ -1,4 +1,3 @@
-import vanna
 from .training import init_vanna
 
 vn = init_vanna()

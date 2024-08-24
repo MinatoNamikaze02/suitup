@@ -55,16 +55,17 @@ def setup_database(database_uri='sqlite:///jobs.db'):
 
 class JobScraper:
     def __init__(self, database_uri='sqlite:///jobs.db'):
-        self.engine = setup_database(database_uri)
-        self.Session = sessionmaker(bind=self.engine) 
+        self.engine = create_engine(database_uri)  # Use your appropriate database URL
+        Base.metadata.create_all(self.engine)  # Create tables if they don't exist
+        self.Session = sessionmaker(bind=self.engine)
+        self.session = self.Session()
 
     def generate_unique_id(self, row):
         return str(uuid.uuid4())
 
     def get_all_jobs(self):
-        session = self.Session()
-        jobs = session.query(JobPost).all()
-        session.close()
+        jobs = self.session.query(JobPost).all()
+        self.session.close()
         # convert to json
         jobs_json = []
         for job in jobs:
@@ -75,10 +76,9 @@ class JobScraper:
         return jobs_json
     
     def purge_jobs(self):
-        session = self.Session()
-        session.query(JobPost).delete()
-        session.commit()
-        session.close()
+        self.session.query(JobPost).delete()
+        self.session.commit()
+        self.session.close()
     
     def process_df(self, df):
         df = df.fillna('')
