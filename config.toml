@@ -13,7 +13,7 @@ verbose = false
 hyperlinks = true
 
 [Resume]
-resumeFilePath = "resume_uploads/Design_resume.pdf"
+resumeFilePath = "your/path/to/resume.pdf"
 
 [GenAI]
 openAIModel = "gpt-3.5-turbo"
