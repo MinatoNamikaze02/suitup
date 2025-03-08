@@ -11,7 +11,7 @@ from vanna.vannadb.vannadb_vector import VannaDB_VectorStore
 from . import documentation
 from config import settings
 
-class CMHQVanna(VannaDB_VectorStore, OpenAI_Chat):
+class SuitUpVanna(VannaDB_VectorStore, OpenAI_Chat):
     def __init__(self, config=None):
         model = settings.vanna_model_name
         api_key = settings.vanna_api_key
@@ -19,26 +19,23 @@ class CMHQVanna(VannaDB_VectorStore, OpenAI_Chat):
         OpenAI_Chat.__init__(self, config=config)
  
 def init_vanna(model="gpt-3.5-turbo"):
-    cmhq_analyst = CMHQVanna(config={'api_key': settings.open_ai_api_key, 'model': model})
-
-    cmhq_analyst.connect_to_sqlite('jobs.db')
-
-    return cmhq_analyst
+    suitupvanna = SuitUpVanna(config={'api_key': settings.open_ai_api_key, 'model': model})
+    suitupvanna.connect_to_sqlite('jobs.db')
+    return suitupvanna
 
 if __name__ == "__main__":
-    cmhq_analyst = init_vanna(model="gpt-3.5-turbo")
+    suitupvanna = init_vanna(model="gpt-3.5-turbo")
 
     command = "SELECT type, sql FROM sqlite_master WHERE sql is not null"
 
     # ddl training
     print("Training DDL...")
-    df_ddl = cmhq_analyst.run_sql(command)
+    df_ddl = suitupvanna.run_sql(command)
 
     for ddl in df_ddl['sql']:
-        cmhq_analyst.train(ddl=ddl)
+        suitupvanna.train(ddl=ddl)
 
-    # training documenation
     print("Training Documentation...")
     for doc in documentation.important_documentation:
-        cmhq_analyst.train(documentation=doc)
+        suitupvanna.train(documentation=doc)
     

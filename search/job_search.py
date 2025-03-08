@@ -55,7 +55,7 @@ class JobScraper:
     
     def do_jobs_exist_in_db(self):
         return self.session.query(self.session.query(JobPost).exists()).scalar()
-    
+        
     def get_all_jobs(self):
         jobs = self.session.query(JobPost).all()
         self.session.close()
