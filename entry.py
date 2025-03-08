@@ -290,7 +290,7 @@ async def on_chat_start():
     if not os.path.exists(resume_file_path):
         msg = await cl.Message(content="No resume found. Please upload your resume.",  author="Jobs Analyst").send()
         await cl.Action(name="Upload Resume", payload={"value":"upload_resume"}).send(for_id=msg.id)
-    elif job_scraper.do_jobs_exist_in_db():
+    elif not job_scraper.do_jobs_exist_in_db():
         msg = await cl.Message(content="Resume found, but no jobs synced yet.", author="Jobs Analyst").send()
         await cl.Action(name="Sync Jobs", payload={"value":"sync_jobs"}).send(for_id=msg.id)
         await cl.Action(name="Upload New Resume", payload={"value":"upload_resume"}).send(for_id=msg.id)
