@@ -105,7 +105,7 @@ async def sync_jobs(action):
             job_scraper.scrape_and_save(**args)
 
         msg = await cl.Message(content="Jobs synced successfully", author="Jobs Analyst").send()
-        await cl.Action(name="View Jobs", value="view_jobs").send(for_id=msg.id)
+        await cl.Action(name="View Jobs", payload={"value":"view_jobs"}).send(for_id=msg.id)
     except Exception as e:
         logger.error(traceback.format_exc())
         await cl.Message(content=f"Error syncing jobs: {str(e)}", author="Jobs Analyst").send()
@@ -141,7 +141,7 @@ async def upload_new_resume(action):
                 os.remove("user_info.json")
 
             msg = await cl.Message(content=f"Resume uploaded: {resume.name}", author="Jobs Analyst").send()
-            await cl.Action(name="Sync Jobs", value="sync_jobs").send(for_id=msg.id)
+            await cl.Action(name="Sync Jobs", payload={"value":"sync_jobs"}).send(for_id=msg.id)
         except Exception as e:
             await cl.Message(content=f"Error uploading resume: {str(e)}", author="Jobs Analyst").send()
 
@@ -174,7 +174,7 @@ async def upload_resume(action):
                 os.remove("user_info.json")
 
             msg = await cl.Message(content=f"Resume uploaded: {resume.name}", author="Jobs Analyst").send()
-            await cl.Action(name="Sync Jobs", value="sync_jobs").send(for_id=msg.id)
+            await cl.Action(name="Sync Jobs", payload={"value":"sync_jobs"}).send(for_id=msg.id)
         except Exception as e:
             await cl.Message(content=f"Error uploading resume: {str(e)}", author="Jobs Analyst").send()
 
@@ -188,17 +188,18 @@ async def reset_cache_seed(action):
         os.remove("user_info.json")
 
     msg = await cl.Message(content="Cache seed reset successfully", author="Jobs Analyst").send()
-    await cl.Action(name="Sync Jobs", value="sync_jobs", author="Jobs Analyst").send(for_id=msg.id)
+    await cl.Action(name="Sync Jobs", payload={"value":"sync_jobs"}, author="Jobs Analyst").send(for_id=msg.id)
 
 @cl.action_callback("Purge Jobs")
 async def purge_jobs(action):
     try:
-        if os.path.exists("jobs.db"):
-            os.remove("jobs.db")
+        job_scraper = global_settings.get("job_scraper")
+        if job_scraper and hasattr(job_scraper, 'purge_jobs'):
+            job_scraper.purge_jobs()
         msg = await cl.Message(content="Jobs purged successfully", author="Jobs Analyst").send()
-        await cl.Action(name="Sync Jobs", value="sync_jobs").send(for_id=msg.id)
-        await cl.Action(name="Upload New Resume", value="upload_resume").send(for_id=msg.id)
-        await cl.Action(name="Reset cache seed", value="reset_cache_seed").send(for_id=msg.id)
+        await cl.Action(name="Sync Jobs", payload={"value":"sync_jobs"}).send(for_id=msg.id)
+        await cl.Action(name="Upload New Resume", payload={"value":"upload_resume"}).send(for_id=msg.id)
+        await cl.Action(name="Reset cache seed", payload={"value":"reset_cache_seed"}).send(for_id=msg.id)
     except Exception as e:
         await cl.Message(content=f"Error purging jobs: {str(e)}", author="Jobs Analyst").send()
 
@@ -212,7 +213,7 @@ async def view_jobs(action):
         card_content = utils.jobs_to_valid_html(job)
         msg = await cl.Message(content=card_content).send()
 
-    await cl.Action(name="Purge Jobs", value="purge_jobs").send(for_id=msg.id)
+    await cl.Action(name="Purge Jobs", payload={"value":"purge_jobs"}).send(for_id=msg.id)
 
 @cl.on_chat_start
 async def on_chat_start():
@@ -288,16 +289,16 @@ async def on_chat_start():
 
     if not os.path.exists(resume_file_path):
         msg = await cl.Message(content="No resume found. Please upload your resume.",  author="Jobs Analyst").send()
-        await cl.Action(name="Upload Resume", value="upload_resume").send(for_id=msg.id)
-    elif not os.path.exists("jobs.db"):
+        await cl.Action(name="Upload Resume", payload={"value":"upload_resume"}).send(for_id=msg.id)
+    elif job_scraper.do_jobs_exist_in_db():
         msg = await cl.Message(content="Resume found, but no jobs synced yet.", author="Jobs Analyst").send()
-        await cl.Action(name="Sync Jobs", value="sync_jobs").send(for_id=msg.id)
-        await cl.Action(name="Upload New Resume", value="upload_resume").send(for_id=msg.id)
-        await cl.Action(name="Reset cache seed", value="reset_cache_seed").send(for_id=msg.id)
+        await cl.Action(name="Sync Jobs", payload={"value":"sync_jobs"}).send(for_id=msg.id)
+        await cl.Action(name="Upload New Resume", payload={"value":"upload_resume"}).send(for_id=msg.id)
+        await cl.Action(name="Reset cache seed", payload={"value":"reset_cache_seed"}).send(for_id=msg.id)
     else:
         msg = await cl.Message(content="Jobs are available.", author="Jobs Analyst").send()
-        await cl.Action(name="View Jobs", value="view_jobs").send(for_id=msg.id)
-        await cl.Action(name="Purge Jobs", value="purge_jobs").send(for_id=msg.id)
+        await cl.Action(name="View Jobs", payload={"value":"view_jobs"}).send(for_id=msg.id)
+        await cl.Action(name="Purge Jobs", payload={"value":"purge_jobs"}).send(for_id=msg.id)
 
 if __name__ == "__main__":
     cl.run()
